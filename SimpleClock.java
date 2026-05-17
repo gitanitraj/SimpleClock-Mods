@@ -1,9 +1,9 @@
 //package SimpleClock;
 
-import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import javax.swing.*;
 
 
 public class SimpleClock extends JFrame {
@@ -51,23 +51,32 @@ public class SimpleClock extends JFrame {
         }
     
         public void setTimer() {
-            while (true) {
-                time = timeFormat.format(Calendar.getInstance().getTime());
-                timeLabel.setText(time);
-    
-                day = dayFormat.format(Calendar.getInstance().getTime());
-                dayLabel.setText(day);
-    
-                date = dateFormat.format(Calendar.getInstance().getTime());
-                dateLabel.setText(date);
-    
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                    e.getStackTrace();
+            Thread clockThread = new Thread(() -> {
+                while (true) {
+                    Calendar now = Calendar.getInstance();
+
+                    String newTime = timeFormat.format(now.getTime());
+                    String newDay  = dayFormat.format(now.getTime());
+                    String newDate = dateFormat.format(now.getTime());
+
+                    SwingUtilities.invokeLater(() -> {
+                        timeLabel.setText(newTime);
+                        dayLabel.setText(newDay);
+                        dateLabel.setText(newDate);
+                    });
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
+            });
+
+            clockThread.setDaemon(true); // closes automatically when window closes
+            clockThread.start();
         }
+
         public static void main(String[] args) {
             new SimpleClock();
         }

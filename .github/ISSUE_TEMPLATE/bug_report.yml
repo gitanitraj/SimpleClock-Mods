@@ -1,8 +1,8 @@
 name: Bug Report
 description: Create a report to help us improve
-title: "[Bug]: "
+title: "[setTimer()]: "
 labels: ["bug", "triage"]
-projects: ["Curriculum"]
+projects: ["UI"]
 assignees:
   - none
 body:
